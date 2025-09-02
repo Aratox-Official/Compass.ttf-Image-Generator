@@ -3,23 +3,26 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Compass.ttf Image Generator</title>
+<title>Custom Text Generator with Dark Mode</title>
+<!-- Font and styles -->
 <style>
   @font-face {
-        font-family: Compass;
-        src: url("../../compass-ttf-image-generator/compass.ttf") format('truetype');
-        font-weight: bold;
-        font-style: normal;
-      }
+    font-family: Compass;
+    src: url("../../compass-ttf-image-generator/compass.ttf") format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
 
   body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f0f0f0;
+    background-color: #0d1117;
+    color: #c9d1d9;
   }
 
   h1 {
     text-align: center;
+    color: #58a6ff;
   }
 
   .controls {
@@ -28,10 +31,14 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 8px;
   }
 
   label {
     font-weight: bold;
+    color: #c9d1d9;
   }
 
   input[type="text"],
@@ -40,6 +47,17 @@
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    color: #c9d1d9;
+  }
+
+  input[type="color"] {
+    padding: 0;
+    border: none;
+    width: 40px;
+    height: 40px;
   }
 
   #canvasContainer {
@@ -47,19 +65,35 @@
   }
 
   canvas {
-    border: 1px solid #ccc;
+    border: 1px solid #30363d;
+    background-color: transparent;
+    display: block;
+    margin: 0 auto;
   }
 
   button {
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+    background-color: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  button:hover:enabled {
+    background-color: #2c3643;
   }
 </style>
 </head>
 <body>
 
-<h1>Custom Text Generator with compass.ttf</h1>
+<h1>Compass.ttf Image Generator</h1>
 
 <div class="controls">
   <label for="textInput">Text:</label>
@@ -94,6 +128,7 @@
 </div>
 
 <script>
+
   const textInput = document.getElementById('textInput');
   const fontSizeInput = document.getElementById('fontSize');
   const colorTypeSelect = document.getElementById('colorType');
@@ -109,9 +144,11 @@
 
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
-      colorControls.style.display = 'block';
+      gradientStart.parentElement.style.display = 'none';
+      gradientEnd.parentElement.style.display = 'none';
     } else {
-      colorControls.style.display = 'block';
+      gradientStart.parentElement.style.display = 'block';
+      gradientEnd.parentElement.style.display = 'block';
     }
   }
 
@@ -119,33 +156,33 @@
 
   colorTypeSelect.addEventListener('change', toggleColorControls);
 
-function generateImage() {
-  const text = textInput.value;
-  const fontSize = parseInt(fontSizeInput.value, 10);
-  const colorType = colorTypeSelect.value;
+  function generateImage() {
+    const text = textInput.value;
+    const fontSize = parseInt(fontSizeInput.value, 10);
+    const colorType = colorTypeSelect.value;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = `${fontSize}px 'Compass'`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
+    ctx.font = `${fontSize}px 'Compass'`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
 
-  const x = canvas.width / 2;
-  const y = canvas.height / 2;
+    const x = canvas.width / 2;
+    const y = canvas.height / 2;
 
-  if (colorType === 'solid') {
-    ctx.fillStyle = colorPicker.value;
-  } else {
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    gradient.addColorStop(0, gradientStart.value);
-    gradient.addColorStop(1, gradientEnd.value);
-    ctx.fillStyle = gradient;
+    if (colorType === 'solid') {
+      ctx.fillStyle = colorPicker.value;
+    } else {
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      gradient.addColorStop(0, gradientStart.value);
+      gradient.addColorStop(1, gradientEnd.value);
+      ctx.fillStyle = gradient;
+    }
+
+    ctx.fillText(text, x, y);
+
+    downloadBtn.disabled = false;
   }
-
-  ctx.fillText(text, x, y);
-
-  downloadBtn.disabled = false;
-}
 
   generateBtn.addEventListener('click', generateImage);
 
