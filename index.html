@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Compass.ttf Image Generator</title>
-<!-- Font and styles -->
 <style>
   @font-face {
     font-family: Compass;
@@ -23,11 +22,18 @@
   h1 {
     text-align: center;
     color: #58a6ff;
+    margin-bottom: 20px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
   }
 
   .controls {
-    max-width: 600px;
-    margin: 0 auto 20px auto;
+    width: 300px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -61,14 +67,18 @@
   }
 
   #canvasContainer {
-    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   canvas {
     border: 1px solid #30363d;
     background-color: transparent;
     display: block;
-    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
   }
 
   button {
@@ -95,66 +105,62 @@
 
 <h1>Compass.ttf Image Generator</h1>
 
-<div class="controls">
-  <label for="textInput">Text:</label>
-  <input type="text" id="textInput" placeholder="Enter your text" value="Hello World" />
-
-  <label for="fontSize">Font Size (px):</label>
-  <input type="number" id="fontSize" min="10" max="200" value="48" />
-
-  <label for="colorType">Color Type:</label>
-  <select id="colorType">
-    <option value="solid">Solid Color</option>
-    <option value="gradient">Gradient</option>
-  </select>
-
-  <div id="colorControls">
-    <label for="colorPicker">Color:</label>
-    <input type="color" id="colorPicker" value="#000000" />
-
-    <label for="gradientStart">Gradient Start Color:</label>
-    <input type="color" id="gradientStart" value="#ff0000" />
-
-    <label for="gradientEnd">Gradient End Color:</label>
-    <input type="color" id="gradientEnd" value="#0000ff" />
+<div class="container">
+  <div id="canvasContainer">
+    <canvas id="textCanvas" width="800" height="600"></canvas>
   </div>
 
-  <button id="generateBtn">Generate Image</button>
-  <button id="downloadBtn" disabled>Download Image</button>
-</div>
+  <div class="controls">
+    <label for="textInput">Text:</label>
+    <input type="text" id="textInput" placeholder="Enter your text" value="Hello World" />
 
-<div id="canvasContainer">
-  <canvas id="textCanvas" width="800" height="600"></canvas>
+    <label for="fontSize">Font Size (px):</label>
+    <input type="number" id="fontSize" min="10" max="200" value="48" />
+
+    <label for="colorType">Color Type:</label>
+    <select id="colorType">
+      <option value="solid">Solid Color</option>
+      <option value="gradient">Gradient</option>
+    </select>
+
+    <div id="colorControls">
+      <label for="colorPicker">Color:</label>
+      <input type="color" id="colorPicker" value="#000000" />
+
+      <label for="gradientStart">Gradient Start Color:</label>
+      <input type="color" id="gradientStart" value="#ff0000" />
+
+      <label for="gradientEnd">Gradient End Color:</label>
+      <input type="color" id="gradientEnd" value="#0000ff" />
+    </div>
+
+    <button id="downloadBtn" disabled>Download Image</button>
+  </div>
 </div>
 
 <script>
-
   const textInput = document.getElementById('textInput');
   const fontSizeInput = document.getElementById('fontSize');
   const colorTypeSelect = document.getElementById('colorType');
   const colorPicker = document.getElementById('colorPicker');
   const gradientStart = document.getElementById('gradientStart');
   const gradientEnd = document.getElementById('gradientEnd');
-  const generateBtn = document.getElementById('generateBtn');
   const downloadBtn = document.getElementById('downloadBtn');
   const canvas = document.getElementById('textCanvas');
   const ctx = canvas.getContext('2d');
-
   const colorControls = document.getElementById('colorControls');
 
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
       gradientStart.parentElement.style.display = 'none';
       gradientEnd.parentElement.style.display = 'none';
+      colorPicker.parentElement.style.display = 'block';
     } else {
       gradientStart.parentElement.style.display = 'block';
       gradientEnd.parentElement.style.display = 'block';
+      colorPicker.parentElement.style.display = 'none';
     }
   }
-
-  toggleColorControls();
-
-  colorTypeSelect.addEventListener('change', toggleColorControls);
 
   function generateImage() {
     const text = textInput.value;
@@ -180,11 +186,15 @@
     }
 
     ctx.fillText(text, x, y);
-
     downloadBtn.disabled = false;
   }
 
-  generateBtn.addEventListener('click', generateImage);
+  [textInput, fontSizeInput, colorTypeSelect, colorPicker, gradientStart, gradientEnd].forEach(el => {
+    el.addEventListener('input', () => {
+      toggleColorControls();
+      generateImage();
+    });
+  });
 
   downloadBtn.addEventListener('click', () => {
     const dataURL = canvas.toDataURL('image/png');
@@ -193,6 +203,9 @@
     link.download = 'custom_text.png';
     link.click();
   });
+
+  toggleColorControls();
+  generateImage();
 </script>
 
 </body>
