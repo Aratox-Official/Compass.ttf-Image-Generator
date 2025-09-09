@@ -6,7 +6,7 @@
 <title>Compass.ttf Image Generator</title>
 <style>
   @font-face {
-    font-family: Compass;
+    font-family: 'Compass';
     src: url("../../compass-ttf-image-generator/compass.ttf") format('truetype');
     font-weight: bold;
     font-style: normal;
@@ -15,12 +15,17 @@
   body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #0d1117;
     color: #c9d1d9;
+    background-color: #0d1117;
+    background-image: url("../../compass-ttf-image-generator/gb_stars.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
   }
 
   h1 {
-    font-family: Compass;
+    font-family: Compass, Arial, sans-serif;
     font-size: 45px;
     text-align: center;
     color: #58a6ff;
@@ -39,7 +44,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #161b22;
+    background-color: rgba(22,27,34,0.92);
     padding: 20px;
     border-radius: 8px;
   }
@@ -130,7 +135,7 @@
       <input type="color" id="colorPicker" value="#FFFFFF" />
     </div>
 
-    <div id="gradientColorControls">
+    <div id="gradientColorControls" style="display:none;">
       <label for="gradientStart">Gradient Start Color:</label>
       <input type="color" id="gradientStart" value="#ff0000" />
 
@@ -155,9 +160,6 @@
   const solidColorControls = document.getElementById('solidColorControls');
   const gradientColorControls = document.getElementById('gradientColorControls');
 
-  const bgImage = new Image();
-  bgImage.src = "../../compass-ttf-image-generator/gb_stars.png";
-
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
       solidColorControls.style.display = 'block';
@@ -168,17 +170,17 @@
     }
   }
 
-  function generateImage() {
-    if (!bgImage.complete) {
-      bgImage.onload = generateImage;
-      return;
-    }
-
+  async function generateImage() {
     const lines = textInput.value.split('\n');
-    const fontSize = parseInt(fontSizeInput.value, 10);
+    const fontSize = parseInt(fontSizeInput.value, 10) || 48;
     const colorType = colorTypeSelect.value;
 
-    ctx.font = `${fontSize}px 'Compass'`;
+    try {
+      await document.fonts.load(`${fontSize}px "Compass"`);
+    } catch (e) {
+    }
+
+    ctx.font = `${fontSize}px "Compass"`;
 
     let maxWidth = 0;
     lines.forEach(line => {
@@ -187,14 +189,13 @@
     });
 
     const padding = 20;
-    canvas.width = Math.max(bgImage.width, maxWidth + padding * 2);
-    canvas.height = Math.max(bgImage.height, fontSize * lines.length * 1.2 + padding * 2);
+    canvas.width = Math.max(200, Math.ceil(maxWidth + padding * 2));
+    canvas.height = Math.ceil(fontSize * lines.length * 1.2 + padding * 2);
 
-    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-
-    ctx.font = `${fontSize}px 'Compass'`;
+    ctx.font = `${fontSize}px "Compass"`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (colorType === 'solid') {
       ctx.fillStyle = colorPicker.value;
@@ -230,8 +231,9 @@
     link.click();
   });
 
+  // initialize UI
   toggleColorControls();
-  bgImage.onload = generateImage;
+  generateImage();
 </script>
 
 </body>
