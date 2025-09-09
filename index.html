@@ -125,10 +125,12 @@
       <option value="gradient">Gradient</option>
     </select>
 
-    <div id="colorControls">
+    <div id="solidColorControls">
       <label for="colorPicker">Color:</label>
-      <input type="color" id="colorPicker" value="#000000" />
+      <input type="color" id="colorPicker" value="#FFFFFF" />
+    </div>
 
+    <div id="gradientColorControls">
       <label for="gradientStart">Gradient Start Color:</label>
       <input type="color" id="gradientStart" value="#ff0000" />
 
@@ -150,17 +152,16 @@
   const downloadBtn = document.getElementById('downloadBtn');
   const canvas = document.getElementById('textCanvas');
   const ctx = canvas.getContext('2d');
-  const colorControls = document.getElementById('colorControls');
+  const solidColorControls = document.getElementById('solidColorControls');
+  const gradientColorControls = document.getElementById('gradientColorControls');
 
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
-      gradientStart.parentElement.style.display = 'none';
-      gradientEnd.parentElement.style.display = 'none';
-      colorPicker.parentElement.style.display = 'block';
+      solidColorControls.style.display = 'block';
+      gradientColorControls.style.display = 'none';
     } else {
-      gradientStart.parentElement.style.display = 'block';
-      gradientEnd.parentElement.style.display = 'block';
-      colorPicker.parentElement.style.display = 'none';
+      solidColorControls.style.display = 'none';
+      gradientColorControls.style.display = 'block';
     }
   }
 
