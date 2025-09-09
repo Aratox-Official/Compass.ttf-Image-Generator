@@ -155,6 +155,9 @@
   const solidColorControls = document.getElementById('solidColorControls');
   const gradientColorControls = document.getElementById('gradientColorControls');
 
+  const bgImage = new Image();
+  bgImage.src = "../../compass-ttf-image-generator/gb_stars.png";
+
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
       solidColorControls.style.display = 'block';
@@ -166,6 +169,11 @@
   }
 
   function generateImage() {
+    if (!bgImage.complete) {
+      bgImage.onload = generateImage;
+      return;
+    }
+
     const lines = textInput.value.split('\n');
     const fontSize = parseInt(fontSizeInput.value, 10);
     const colorType = colorTypeSelect.value;
@@ -179,8 +187,10 @@
     });
 
     const padding = 20;
-    canvas.width = maxWidth + padding * 2;
-    canvas.height = fontSize * lines.length * 1.2 + padding * 2;
+    canvas.width = Math.max(bgImage.width, maxWidth + padding * 2);
+    canvas.height = Math.max(bgImage.height, fontSize * lines.length * 1.2 + padding * 2);
+
+    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
     ctx.font = `${fontSize}px 'Compass'`;
     ctx.textAlign = 'center';
@@ -221,7 +231,7 @@
   });
 
   toggleColorControls();
-  generateImage();
+  bgImage.onload = generateImage;
 </script>
 
 </body>
