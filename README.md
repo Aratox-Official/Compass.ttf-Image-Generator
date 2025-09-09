@@ -1,6 +1,6 @@
 # Compass.ttf Image Generator
 
-A compass.ttf image generator for all of your gobattle.io needs. Web version link: [click here](https://aratox-official.github.io/compass-ttf-image-generator/index.html)
+A compass.ttf image generator for all of your gobattle.io needs. Web version link: [click here](https://aratox-official.github.io/Compass.ttf-Image-Generator/index.html)
 
 # Play the Game!
 
@@ -10,4 +10,4 @@ IMPORTANT: This image generator is maintained by Aratox and is not, in any part,
 
 ## License
 
-[MIT License](https://github.com/Aratox-Official/compass-ttf-image-generator/blob/main/LICENSE)
+[MIT License](https://github.com/Aratox-Official/Compass.ttf-Image-Generator/blob/main/LICENSE)
