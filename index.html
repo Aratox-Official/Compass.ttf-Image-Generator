@@ -22,25 +22,14 @@
     transition: background-image 0.5s ease;
   }
 
-  /* Dark Mode Styles */
   body.dark-mode {
     color: #c9d1d9;
     background-color: #0d1117;
     background-image: url("../../Compass.ttf-Image-Generator/gb_stars.png");
   }
-  
-  .dark-mode h1 {
-    color: #58a6ff;
-  }
-
-  .dark-mode .controls {
-    background-color: rgba(22,27,34,0.92);
-  }
-
-  .dark-mode label {
-    color: #c9d1d9;
-  }
-
+  .dark-mode h1 { color: #58a6ff; }
+  .dark-mode .controls { background-color: rgba(22,27,34,0.92); }
+  .dark-mode label { color: #c9d1d9; }
   .dark-mode textarea,
   .dark-mode input[type="number"],
   .dark-mode select {
@@ -48,39 +37,22 @@
     border: 1px solid #30363d;
     color: #c9d1d9;
   }
-
-  .dark-mode canvas {
-    border: 1px solid #30363d;
-  }
-
+  .dark-mode canvas { border: 1px solid #30363d; }
   .dark-mode button {
     background-color: #21262d;
     color: #c9d1d9;
     border: 1px solid #30363d;
   }
-
-  .dark-mode button:hover:enabled {
-    background-color: #2c3643;
-  }
+  .dark-mode button:hover:enabled { background-color: #2c3643; }
 
   body.light-mode {
     color: #24292e;
     background-color: #f6f8fa;
     background-image: url("../../Compass.ttf-Image-Generator/gb_mountains.png");
   }
-
-  .light-mode h1 {
-    color: #0366d6;
-  }
-
-  .light-mode .controls {
-    background-color: rgba(246,248,250,0.92);
-  }
-
-  .light-mode label {
-    color: #24292e;
-  }
-
+  .light-mode h1 { color: #0366d6; }
+  .light-mode .controls { background-color: rgba(246,248,250,0.92); }
+  .light-mode label { color: #24292e; }
   .light-mode textarea,
   .light-mode input[type="number"],
   .light-mode select {
@@ -88,20 +60,13 @@
     border: 1px solid #d1d5da;
     color: #24292e;
   }
-
-  .light-mode canvas {
-    border: 1px solid #d1d5da;
-  }
-
+  .light-mode canvas { border: 1px solid #d1d5da; }
   .light-mode button {
     background-color: #e1e4e8;
     color: #24292e;
     border: 1px solid #d1d5da;
   }
-
-  .light-mode button:hover:enabled {
-    background-color: #d1d5da;
-  }
+  .light-mode button:hover:enabled { background-color: #d1d5da; }
 
   h1 {
     font-family: Compass, Arial, sans-serif;
@@ -127,9 +92,7 @@
     transition: background-color 0.5s ease;
   }
 
-  label {
-    font-weight: bold;
-  }
+  label { font-weight: bold; }
 
   textarea,
   input[type="number"],
@@ -162,30 +125,18 @@
     transition: border-color 0.5s ease;
   }
 
-  .button-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 6px;
-  }
-
   button {
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+    width: 100%;
   }
 
   button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-
-  .status {
-    font-size: 13px;
-    margin-left: 6px;
-    min-width: 160px;
   }
 
   .mode-toggle {
@@ -203,20 +154,13 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, color 0.3s ease;
   }
-
-  .mode-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
+  .mode-toggle:hover { background-color: rgba(255, 255, 255, 0.2); }
   .light-mode .mode-toggle {
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.2);
     color: black;
   }
-
-  .light-mode .mode-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+  .light-mode .mode-toggle:hover { background-color: rgba(0, 0, 0, 0.2); }
 </style>
 </head>
 <body class="dark-mode">
@@ -249,16 +193,12 @@
     <div id="gradientColorControls" style="display:none;">
       <label for="gradientStart">Gradient Start Color:</label>
       <input type="color" id="gradientStart" value="#ff0000" />
-
       <label for="gradientEnd">Gradient End Color:</label>
       <input type="color" id="gradientEnd" value="#0000ff" />
     </div>
 
-    <div class="button-row">
-      <button id="downloadBtn" disabled>Download Image</button>
-      <button id="copyBtn" disabled title="Copy image to clipboard">Copy Image</button>
-      <span class="status" id="status">No image yet</span>
-    </div>
+    <button id="downloadBtn" disabled>Download Image</button>
+    <button id="copyBtn" disabled>Copy Image</button>
   </div>
 </div>
 
@@ -273,18 +213,12 @@
   const gradientEnd = document.getElementById('gradientEnd');
   const downloadBtn = document.getElementById('downloadBtn');
   const copyBtn = document.getElementById('copyBtn');
-  const statusSpan = document.getElementById('status');
   const canvas = document.getElementById('textCanvas');
   const ctx = canvas.getContext('2d');
   const solidColorControls = document.getElementById('solidColorControls');
   const gradientColorControls = document.getElementById('gradientColorControls');
   const modeToggleBtn = document.querySelector('.mode-toggle');
   const body = document.body;
-
-  function setStatus(text, isError = false) {
-    statusSpan.textContent = text;
-    statusSpan.style.color = isError ? '#ff6b6b' : '';
-  }
 
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
@@ -303,9 +237,7 @@
 
     try {
       await document.fonts.load(`${fontSize}px "Compass"`);
-    } catch (e) {
-      // ignore
-    }
+    } catch {}
 
     ctx.font = `${fontSize}px "Compass"`;
 
@@ -342,55 +274,35 @@
 
     downloadBtn.disabled = false;
     copyBtn.disabled = false;
-    setStatus('Image ready — you can copy or download.');
   }
 
   async function copyImageToClipboard() {
-    setStatus('Copying…');
     if (navigator.clipboard && window.ClipboardItem) {
-      try {
-        canvas.toBlob(async (blob) => {
-          if (!blob) {
-            setStatus('Failed to create image blob.', true);
-            return;
-          }
+      canvas.toBlob(async (blob) => {
+        if (blob) {
           try {
             await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-            setStatus('Image copied to clipboard!');
           } catch (err) {
             console.error('Clipboard write error:', err);
-            setStatus('Could not write image to clipboard (permission or browser limitation).', true);
           }
-        }, 'image/png');
-        return;
-      } catch (err) {
-        console.warn('ClipboardItem attempt failed:', err);
-      }
+        }
+      }, 'image/png');
+    } else {
+      const dataURL = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = dataURL;
+      link.download = 'custom_text.png';
+      link.click();
     }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      try {
-        const dataURL = canvas.toDataURL('image/png');
-        await navigator.clipboard.writeText(dataURL);
-        setStatus('Data URL copied to clipboard as text. Some apps will accept this; otherwise download the image.');
-        return;
-      } catch (err) {
-        console.warn('writeText fallback failed', err);
-      }
-    }
-
-    setStatus('Copy not supported in this browser. Use "Download Image" then paste the saved file.', true);
   }
 
   function toggleMode() {
     if (body.classList.contains('dark-mode')) {
-      body.classList.remove('dark-mode');
-      body.classList.add('light-mode');
+      body.classList.replace('dark-mode', 'light-mode');
       modeToggleBtn.textContent = 'Switch to Dark Mode';
       document.cookie = "mode=light; path=/; max-age=" + 365*24*60*60;
     } else {
-      body.classList.remove('light-mode');
-      body.classList.add('dark-mode');
+      body.classList.replace('light-mode', 'dark-mode');
       modeToggleBtn.textContent = 'Switch to Light Mode';
       document.cookie = "mode=dark; path=/; max-age=" + 365*24*60*60;
     }
@@ -405,12 +317,10 @@
   function setInitialMode() {
     const savedMode = getCookie('mode');
     if (savedMode === 'light') {
-      body.classList.remove('dark-mode');
-      body.classList.add('light-mode');
+      body.classList.replace('dark-mode', 'light-mode');
       modeToggleBtn.textContent = 'Switch to Dark Mode';
     } else {
-      body.classList.remove('light-mode');
-      body.classList.add('dark-mode');
+      body.classList.replace('light-mode', 'dark-mode');
       modeToggleBtn.textContent = 'Switch to Light Mode';
     }
   }
@@ -428,26 +338,14 @@
     link.href = dataURL;
     link.download = 'custom_text.png';
     link.click();
-    setStatus('Image downloaded.');
   });
 
   copyBtn.addEventListener('click', copyImageToClipboard);
-
   modeToggleBtn.addEventListener('click', toggleMode);
 
   setInitialMode();
   toggleColorControls();
   generateImage();
-
-  window.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
-      if (!copyBtn.disabled) {
-        e.preventDefault();
-        copyImageToClipboard();
-      }
-    }
-  });
 </script>
-
 </body>
 </html>
