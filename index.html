@@ -63,11 +63,10 @@
     background-color: #2c3643;
   }
 
-  /* Light Mode Styles */
   body.light-mode {
     color: #24292e;
     background-color: #f6f8fa;
-    background-image: url("../../Compass.ttf-Image-Generator/gb_sunset.png");
+    background-image: url("../../Compass.ttf-Image-Generator/gb_mountains.png");
   }
 
   .light-mode h1 {
@@ -163,6 +162,13 @@
     transition: border-color 0.5s ease;
   }
 
+  .button-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 6px;
+  }
+
   button {
     padding: 10px;
     font-size: 16px;
@@ -174,6 +180,12 @@
   button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  .status {
+    font-size: 13px;
+    margin-left: 6px;
+    min-width: 160px;
   }
 
   .mode-toggle {
@@ -218,7 +230,7 @@
 
   <div class="controls">
     <label for="textInput">Text:</label>
-    <textarea id="textInput" rows="4">Hello GoBattler</textarea>
+    <textarea id="textInput" rows="4">Welcome GoBattler</textarea>
 
     <label for="fontSize">Font Size (px):</label>
     <input type="number" id="fontSize" min="10" max="200" value="48" />
@@ -242,7 +254,11 @@
       <input type="color" id="gradientEnd" value="#0000ff" />
     </div>
 
-    <button id="downloadBtn" disabled>Download Image</button>
+    <div class="button-row">
+      <button id="downloadBtn" disabled>Download Image</button>
+      <button id="copyBtn" disabled title="Copy image to clipboard">Copy Image</button>
+      <span class="status" id="status">No image yet</span>
+    </div>
   </div>
 </div>
 
@@ -256,12 +272,19 @@
   const gradientStart = document.getElementById('gradientStart');
   const gradientEnd = document.getElementById('gradientEnd');
   const downloadBtn = document.getElementById('downloadBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const statusSpan = document.getElementById('status');
   const canvas = document.getElementById('textCanvas');
   const ctx = canvas.getContext('2d');
   const solidColorControls = document.getElementById('solidColorControls');
   const gradientColorControls = document.getElementById('gradientColorControls');
   const modeToggleBtn = document.querySelector('.mode-toggle');
   const body = document.body;
+
+  function setStatus(text, isError = false) {
+    statusSpan.textContent = text;
+    statusSpan.style.color = isError ? '#ff6b6b' : '';
+  }
 
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
@@ -281,6 +304,7 @@
     try {
       await document.fonts.load(`${fontSize}px "Compass"`);
     } catch (e) {
+      // ignore
     }
 
     ctx.font = `${fontSize}px "Compass"`;
@@ -317,6 +341,45 @@
     });
 
     downloadBtn.disabled = false;
+    copyBtn.disabled = false;
+    setStatus('Image ready — you can copy or download.');
+  }
+
+  async function copyImageToClipboard() {
+    setStatus('Copying…');
+    if (navigator.clipboard && window.ClipboardItem) {
+      try {
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            setStatus('Failed to create image blob.', true);
+            return;
+          }
+          try {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+            setStatus('Image copied to clipboard!');
+          } catch (err) {
+            console.error('Clipboard write error:', err);
+            setStatus('Could not write image to clipboard (permission or browser limitation).', true);
+          }
+        }, 'image/png');
+        return;
+      } catch (err) {
+        console.warn('ClipboardItem attempt failed:', err);
+      }
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        const dataURL = canvas.toDataURL('image/png');
+        await navigator.clipboard.writeText(dataURL);
+        setStatus('Data URL copied to clipboard as text. Some apps will accept this; otherwise download the image.');
+        return;
+      } catch (err) {
+        console.warn('writeText fallback failed', err);
+      }
+    }
+
+    setStatus('Copy not supported in this browser. Use "Download Image" then paste the saved file.', true);
   }
 
   function toggleMode() {
@@ -365,14 +428,25 @@
     link.href = dataURL;
     link.download = 'custom_text.png';
     link.click();
+    setStatus('Image downloaded.');
   });
+
+  copyBtn.addEventListener('click', copyImageToClipboard);
 
   modeToggleBtn.addEventListener('click', toggleMode);
 
-  // initialize UI
   setInitialMode();
   toggleColorControls();
   generateImage();
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
+      if (!copyBtn.disabled) {
+        e.preventDefault();
+        copyImageToClipboard();
+      }
+    }
+  });
 </script>
 
 </body>
