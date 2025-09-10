@@ -15,20 +15,97 @@
   body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    color: #c9d1d9;
-    background-color: #0d1117;
-    background-image: url("../../Compass.ttf-Image-Generator/gb_stars.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
+    transition: background-image 0.5s ease;
+  }
+
+  body.dark-mode {
+    color: #c9d1d9;
+    background-color: #0d1117;
+    background-image: url("../../Compass.ttf-Image-Generator/gb_stars.png");
+  }
+  
+  .dark-mode h1 {
+    color: #58a6ff;
+  }
+
+  .dark-mode .controls {
+    background-color: rgba(22,27,34,0.92);
+  }
+
+  .dark-mode label {
+    color: #c9d1d9;
+  }
+
+  .dark-mode textarea,
+  .dark-mode input[type="number"],
+  .dark-mode select {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+  }
+
+  .dark-mode canvas {
+    border: 1px solid #30363d;
+  }
+
+  .dark-mode button {
+    background-color: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+  }
+
+  .dark-mode button:hover:enabled {
+    background-color: #2c3643;
+  }
+
+  body.light-mode {
+    color: #24292e;
+    background-color: #f6f8fa;
+    background-image: url("../../Compass.ttf-Image-Generator/gb_sunset.png");
+  }
+
+  .light-mode h1 {
+    color: #0366d6;
+  }
+
+  .light-mode .controls {
+    background-color: rgba(246,248,250,0.92);
+  }
+
+  .light-mode label {
+    color: #24292e;
+  }
+
+  .light-mode textarea,
+  .light-mode input[type="number"],
+  .light-mode select {
+    background-color: #f6f8fa;
+    border: 1px solid #d1d5da;
+    color: #24292e;
+  }
+
+  .light-mode canvas {
+    border: 1px solid #d1d5da;
+  }
+
+  .light-mode button {
+    background-color: #e1e4e8;
+    color: #24292e;
+    border: 1px solid #d1d5da;
+  }
+
+  .light-mode button:hover:enabled {
+    background-color: #d1d5da;
   }
 
   h1 {
     font-family: Compass, Arial, sans-serif;
     font-size: 45px;
     text-align: center;
-    color: #58a6ff;
     margin-bottom: 40px;
   }
 
@@ -44,14 +121,13 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: rgba(22,27,34,0.92);
     padding: 20px;
     border-radius: 8px;
+    transition: background-color 0.5s ease;
   }
 
   label {
     font-weight: bold;
-    color: #c9d1d9;
   }
 
   textarea,
@@ -60,10 +136,7 @@
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
-    background-color: #0d1117;
-    border: 1px solid #30363d;
     border-radius: 4px;
-    color: #c9d1d9;
   }
 
   input[type="color"] {
@@ -81,21 +154,19 @@
   }
 
   canvas {
-    border: 1px solid #30363d;
     background-color: transparent;
     display: block;
     max-width: 100%;
     height: auto;
+    transition: border-color 0.5s ease;
   }
 
   button {
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
     border-radius: 4px;
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
   }
 
   button:disabled {
@@ -103,12 +174,38 @@
     cursor: not-allowed;
   }
 
-  button:hover:enabled {
-    background-color: #2c3643;
+  .mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .light-mode .mode-toggle {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: black;
+  }
+
+  .light-mode .mode-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 </style>
 </head>
-<body>
+<body class="dark-mode">
 
 <h1>Compass.ttf Image Generator</h1>
 
@@ -147,6 +244,8 @@
   </div>
 </div>
 
+<button class="mode-toggle">Switch to Light Mode</button>
+
 <script>
   const textInput = document.getElementById('textInput');
   const fontSizeInput = document.getElementById('fontSize');
@@ -159,6 +258,8 @@
   const ctx = canvas.getContext('2d');
   const solidColorControls = document.getElementById('solidColorControls');
   const gradientColorControls = document.getElementById('gradientColorControls');
+  const modeToggleBtn = document.querySelector('.mode-toggle');
+  const body = document.body;
 
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
@@ -216,6 +317,39 @@
     downloadBtn.disabled = false;
   }
 
+  function toggleMode() {
+    if (body.classList.contains('dark-mode')) {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+      modeToggleBtn.textContent = 'Switch to Dark Mode';
+      document.cookie = "mode=light; path=/; max-age=" + 365*24*60*60;
+    } else {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+      modeToggleBtn.textContent = 'Switch to Light Mode';
+      document.cookie = "mode=dark; path=/; max-age=" + 365*24*60*60;
+    }
+  }
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  function setInitialMode() {
+    const savedMode = getCookie('mode');
+    if (savedMode === 'light') {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+      modeToggleBtn.textContent = 'Switch to Dark Mode';
+    } else {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+      modeToggleBtn.textContent = 'Switch to Light Mode';
+    }
+  }
+
   [textInput, fontSizeInput, colorTypeSelect, colorPicker, gradientStart, gradientEnd].forEach(el => {
     el.addEventListener('input', () => {
       toggleColorControls();
@@ -231,7 +365,9 @@
     link.click();
   });
 
-  // initialize UI
+  modeToggleBtn.addEventListener('click', toggleMode);
+
+  setInitialMode();
   toggleColorControls();
   generateImage();
 </script>
