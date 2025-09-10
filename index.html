@@ -5,204 +5,206 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Compass.ttf Image Generator</title>
 <style>
-  @font-face {
-    font-family: 'Compass';
-    src: url("../../Compass.ttf-Image-Generator/compass.ttf") format('truetype');
-    font-weight: bold;
-    font-style: normal;
-  }
+  @font-face {
+    font-family: 'Compass';
+    src: url("../../Compass.ttf-Image-Generator/compass.ttf") format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
 
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    transition: background-image 0.5s ease;
-  }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    transition: background-image 0.5s ease;
+  }
 
-  body.dark-mode {
-    color: #c9d1d9;
-    background-color: #0d1117;
-    background-image: url("../../Compass.ttf-Image-Generator/gb_stars.png");
-  }
-  
-  .dark-mode h1 {
-    color: #58a6ff;
-  }
+  /* Dark Mode Styles */
+  body.dark-mode {
+    color: #c9d1d9;
+    background-color: #0d1117;
+    background-image: url("../../Compass.ttf-Image-Generator/gb_stars.png");
+  }
+  
+  .dark-mode h1 {
+    color: #58a6ff;
+  }
 
-  .dark-mode .controls {
-    background-color: rgba(22,27,34,0.92);
-  }
+  .dark-mode .controls {
+    background-color: rgba(22,27,34,0.92);
+  }
 
-  .dark-mode label {
-    color: #c9d1d9;
-  }
+  .dark-mode label {
+    color: #c9d1d9;
+  }
 
-  .dark-mode textarea,
-  .dark-mode input[type="number"],
-  .dark-mode select {
-    background-color: #0d1117;
-    border: 1px solid #30363d;
-    color: #c9d1d9;
-  }
+  .dark-mode textarea,
+  .dark-mode input[type="number"],
+  .dark-mode select {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+  }
 
-  .dark-mode canvas {
-    border: 1px solid #30363d;
-  }
+  .dark-mode canvas {
+    border: 1px solid #30363d;
+  }
 
-  .dark-mode button {
-    background-color: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-  }
+  .dark-mode button {
+    background-color: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+  }
 
-  .dark-mode button:hover:enabled {
-    background-color: #2c3643;
-  }
+  .dark-mode button:hover:enabled {
+    background-color: #2c3643;
+  }
 
-  body.light-mode {
-    color: #24292e;
-    background-color: #f6f8fa;
-    background-image: url("../../Compass.ttf-Image-Generator/gb_mountains.png");
-  }
+  /* Light Mode Styles */
+  body.light-mode {
+    color: #24292e;
+    background-color: #f6f8fa;
+    background-image: url("../../Compass.ttf-Image-Generator/gb_sunset.png");
+  }
 
-  .light-mode h1 {
-    color: #0366d6;
-  }
+  .light-mode h1 {
+    color: #0366d6;
+  }
 
-  .light-mode .controls {
-    background-color: rgba(246,248,250,0.92);
-  }
+  .light-mode .controls {
+    background-color: rgba(246,248,250,0.92);
+  }
 
-  .light-mode label {
-    color: #24292e;
-  }
+  .light-mode label {
+    color: #24292e;
+  }
 
-  .light-mode textarea,
-  .light-mode input[type="number"],
-  .light-mode select {
-    background-color: #f6f8fa;
-    border: 1px solid #d1d5da;
-    color: #24292e;
-  }
+  .light-mode textarea,
+  .light-mode input[type="number"],
+  .light-mode select {
+    background-color: #f6f8fa;
+    border: 1px solid #d1d5da;
+    color: #24292e;
+  }
 
-  .light-mode canvas {
-    border: 1px solid #d1d5da;
-  }
+  .light-mode canvas {
+    border: 1px solid #d1d5da;
+  }
 
-  .light-mode button {
-    background-color: #e1e4e8;
-    color: #24292e;
-    border: 1px solid #d1d5da;
-  }
+  .light-mode button {
+    background-color: #e1e4e8;
+    color: #24292e;
+    border: 1px solid #d1d5da;
+  }
 
-  .light-mode button:hover:enabled {
-    background-color: #d1d5da;
-  }
+  .light-mode button:hover:enabled {
+    background-color: #d1d5da;
+  }
 
-  h1 {
-    font-family: Compass, Arial, sans-serif;
-    font-size: 45px;
-    text-align: center;
-    margin-bottom: 40px;
-  }
+  h1 {
+    font-family: Compass, Arial, sans-serif;
+    font-size: 45px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
 
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-  }
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+  }
 
-  .controls {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px;
-    border-radius: 8px;
-    transition: background-color 0.5s ease;
-  }
+  .controls {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+  }
 
-  label {
-    font-weight: bold;
-  }
+  label {
+    font-weight: bold;
+  }
 
-  textarea,
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border-radius: 4px;
-  }
+  textarea,
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
 
-  input[type="color"] {
-    padding: 0;
-    border: none;
-    width: 40px;
-    height: 40px;
-  }
+  input[type="color"] {
+    padding: 0;
+    border: none;
+    width: 40px;
+    height: 40px;
+  }
 
-  #canvasContainer {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  #canvasContainer {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-  canvas {
-    background-color: transparent;
-    display: block;
-    max-width: 100%;
-    height: auto;
-    transition: border-color 0.5s ease;
-  }
+  canvas {
+    background-color: transparent;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    transition: border-color 0.5s ease;
+  }
 
-  button {
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
-  }
+  button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
 
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-  .mode-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
+  .mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
 
-  .mode-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
+  .mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 
-  .light-mode .mode-toggle {
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    color: black;
-  }
+  .light-mode .mode-toggle {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: black;
+  }
 
-  .light-mode .mode-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+  .light-mode .mode-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 </style>
 </head>
 <body class="dark-mode">
@@ -210,186 +212,167 @@
 <h1>Compass.ttf Image Generator</h1>
 
 <div class="container">
-  <div id="canvasContainer">
-    <canvas id="textCanvas"></canvas>
-  </div>
+  <div id="canvasContainer">
+    <canvas id="textCanvas"></canvas>
+  </div>
 
-  <div class="controls">
-    <label for="textInput">Text:</label>
-    <textarea id="textInput" rows="4">Welcome GoBattler</textarea>
+  <div class="controls">
+    <label for="textInput">Text:</label>
+    <textarea id="textInput" rows="4">Hello GoBattler</textarea>
 
-    <label for="fontSize">Font Size (px):</label>
-    <input type="number" id="fontSize" min="10" max="200" value="48" />
+    <label for="fontSize">Font Size (px):</label>
+    <input type="number" id="fontSize" min="10" max="200" value="48" />
 
-    <label for="colorType">Color Type:</label>
-    <select id="colorType">
-      <option value="solid">Solid Color</option>
-      <option value="gradient">Gradient</option>
-    </select>
+    <label for="colorType">Color Type:</label>
+    <select id="colorType">
+      <option value="solid">Solid Color</option>
+      <option value="gradient">Gradient</option>
+    </select>
 
-    <div id="solidColorControls">
-      <label for="colorPicker">Color:</label>
-      <input type="color" id="colorPicker" value="#FFFFFF" />
-    </div>
+    <div id="solidColorControls">
+      <label for="colorPicker">Color:</label>
+      <input type="color" id="colorPicker" value="#FFFFFF" />
+    </div>
 
-    <div id="gradientColorControls" style="display:none;">
-      <label for="gradientStart">Gradient Start Color:</label>
-      <input type="color" id="gradientStart" value="#ff0000" />
+    <div id="gradientColorControls" style="display:none;">
+      <label for="gradientStart">Gradient Start Color:</label>
+      <input type="color" id="gradientStart" value="#ff0000" />
 
-      <label for="gradientEnd">Gradient End Color:</label>
-      <input type="color" id="gradientEnd" value="#0000ff" />
-    </div>
+      <label for="gradientEnd">Gradient End Color:</label>
+      <input type="color" id="gradientEnd" value="#0000ff" />
+    </div>
 
-    <button id="downloadBtn" disabled>Download Image</button>
-    <button id="copyBtn" disabled>Copy Image</button>
-  </div>
+    <button id="downloadBtn" disabled>Download Image</button>
+  </div>
 </div>
 
 <button class="mode-toggle">Switch to Light Mode</button>
 
 <script>
-  const textInput = document.getElementById('textInput');
-  const fontSizeInput = document.getElementById('fontSize');
-  const colorTypeSelect = document.getElementById('colorType');
-  const colorPicker = document.getElementById('colorPicker');
-  const gradientStart = document.getElementById('gradientStart');
-  const gradientEnd = document.getElementById('gradientEnd');
-  const downloadBtn = document.getElementById('downloadBtn');
-  const copyBtn = document.getElementById('copyBtn');
-  const canvas = document.getElementById('textCanvas');
-  const ctx = canvas.getContext('2d');
-  const solidColorControls = document.getElementById('solidColorControls');
-  const gradientColorControls = document.getElementById('gradientColorControls');
-  const modeToggleBtn = document.querySelector('.mode-toggle');
-  const body = document.body;
+  const textInput = document.getElementById('textInput');
+  const fontSizeInput = document.getElementById('fontSize');
+  const colorTypeSelect = document.getElementById('colorType');
+  const colorPicker = document.getElementById('colorPicker');
+  const gradientStart = document.getElementById('gradientStart');
+  const gradientEnd = document.getElementById('gradientEnd');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const canvas = document.getElementById('textCanvas');
+  const ctx = canvas.getContext('2d');
+  const solidColorControls = document.getElementById('solidColorControls');
+  const gradientColorControls = document.getElementById('gradientColorControls');
+  const modeToggleBtn = document.querySelector('.mode-toggle');
+  const body = document.body;
 
-  function toggleColorControls() {
-    if (colorTypeSelect.value === 'solid') {
-      solidColorControls.style.display = 'block';
-      gradientColorControls.style.display = 'none';
-    } else {
-      solidColorControls.style.display = 'none';
-      gradientColorControls.style.display = 'block';
-    }
-  }
+  function toggleColorControls() {
+    if (colorTypeSelect.value === 'solid') {
+      solidColorControls.style.display = 'block';
+      gradientColorControls.style.display = 'none';
+    } else {
+      solidColorControls.style.display = 'none';
+      gradientColorControls.style.display = 'block';
+    }
+  }
 
-  async function generateImage() {
-    const lines = textInput.value.split('\n');
-    const fontSize = parseInt(fontSizeInput.value, 10) || 48;
-    const colorType = colorTypeSelect.value;
+  async function generateImage() {
+    const lines = textInput.value.split('\n');
+    const fontSize = parseInt(fontSizeInput.value, 10) || 48;
+    const colorType = colorTypeSelect.value;
 
-    try {
-      await document.fonts.load(`${fontSize}px "Compass"`);
-    } catch (e) {
-    }
+    try {
+      await document.fonts.load(`${fontSize}px "Compass"`);
+    } catch (e) {
+    }
 
-    ctx.font = `${fontSize}px "Compass"`;
+    ctx.font = `${fontSize}px "Compass"`;
 
-    let maxWidth = 0;
-    lines.forEach(line => {
-      const width = ctx.measureText(line).width;
-      if (width > maxWidth) maxWidth = width;
-    });
+    let maxWidth = 0;
+    lines.forEach(line => {
+      const width = ctx.measureText(line).width;
+      if (width > maxWidth) maxWidth = width;
+    });
 
-    const padding = 20;
-    canvas.width = Math.max(200, Math.ceil(maxWidth + padding * 2));
-    canvas.height = Math.ceil(fontSize * lines.length * 1.2 + padding * 2);
+    const padding = 20;
+    canvas.width = Math.max(200, Math.ceil(maxWidth + padding * 2));
+    canvas.height = Math.ceil(fontSize * lines.length * 1.2 + padding * 2);
 
-    ctx.font = `${fontSize}px "Compass"`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = `${fontSize}px "Compass"`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (colorType === 'solid') {
-      ctx.fillStyle = colorPicker.value;
-    } else {
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-      gradient.addColorStop(0, gradientStart.value);
-      gradient.addColorStop(1, gradientEnd.value);
-      ctx.fillStyle = gradient;
-    }
+    if (colorType === 'solid') {
+      ctx.fillStyle = colorPicker.value;
+    } else {
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      gradient.addColorStop(0, gradientStart.value);
+      gradient.addColorStop(1, gradientEnd.value);
+      ctx.fillStyle = gradient;
+    }
 
-    const x = canvas.width / 2;
-    const startY = padding + fontSize / 2;
-    lines.forEach((line, i) => {
-      const y = startY + i * fontSize * 1.2;
-      ctx.fillText(line, x, y);
-    });
+    const x = canvas.width / 2;
+    const startY = padding + fontSize / 2;
+    lines.forEach((line, i) => {
+      const y = startY + i * fontSize * 1.2;
+      ctx.fillText(line, x, y);
+    });
 
-    downloadBtn.disabled = false;
-    copyBtn.disabled = false;
-  }
+    downloadBtn.disabled = false;
+  }
 
-  function toggleMode() {
-    if (body.classList.contains('dark-mode')) {
-      body.classList.remove('dark-mode');
-      body.classList.add('light-mode');
-      modeToggleBtn.textContent = 'Switch to Dark Mode';
-      document.cookie = "mode=light; path=/; max-age=" + 365*24*60*60;
-    } else {
-      body.classList.remove('light-mode');
-      body.classList.add('dark-mode');
-      modeToggleBtn.textContent = 'Switch to Light Mode';
-      document.cookie = "mode=dark; path=/; max-age=" + 365*24*60*60;
-    }
-  }
+  function toggleMode() {
+    if (body.classList.contains('dark-mode')) {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+      modeToggleBtn.textContent = 'Switch to Dark Mode';
+      document.cookie = "mode=light; path=/; max-age=" + 365*24*60*60;
+    } else {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+      modeToggleBtn.textContent = 'Switch to Light Mode';
+      document.cookie = "mode=dark; path=/; max-age=" + 365*24*60*60;
+    }
+  }
 
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
 
-  function setInitialMode() {
-    const savedMode = getCookie('mode');
-    if (savedMode === 'light') {
-      body.classList.remove('dark-mode');
-      body.classList.add('light-mode');
-      modeToggleBtn.textContent = 'Switch to Dark Mode';
-    } else {
-      body.classList.remove('light-mode');
-      body.classList.add('dark-mode');
-      modeToggleBtn.textContent = 'Switch to Light Mode';
-    }
-  }
+  function setInitialMode() {
+    const savedMode = getCookie('mode');
+    if (savedMode === 'light') {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+      modeToggleBtn.textContent = 'Switch to Dark Mode';
+    } else {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+      modeToggleBtn.textContent = 'Switch to Light Mode';
+    }
+  }
 
-  [textInput, fontSizeInput, colorTypeSelect, colorPicker, gradientStart, gradientEnd].forEach(el => {
-    el.addEventListener('input', () => {
-      toggleColorControls();
-      generateImage();
-    });
-  });
+  [textInput, fontSizeInput, colorTypeSelect, colorPicker, gradientStart, gradientEnd].forEach(el => {
+    el.addEventListener('input', () => {
+      toggleColorControls();
+      generateImage();
+    });
+  });
 
-  downloadBtn.addEventListener('click', () => {
-    const dataURL = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = dataURL;
-    link.download = 'custom_text.png';
-    link.click();
-  });
+  downloadBtn.addEventListener('click', () => {
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'custom_text.png';
+    link.click();
+  });
 
-  copyBtn.addEventListener('click', () => {
-    canvas.toBlob(blob => {
-      if (!blob) {
-        console.error('Failed to create a Blob from the canvas.');
-        return;
-      }
-      const item = new ClipboardItem({'image/png': blob});
-      navigator.clipboard.write([item]).then(() => {
-        console.log('Image copied to clipboard!');
-        alert('Image copied to clipboard!');
-      }).catch(err => {
-        console.error('Failed to copy image: ', err);
-        alert('Failed to copy image. Your browser might not support this feature or you need to grant permission.');
-      });
-    }, 'image/png');
-  });
+  modeToggleBtn.addEventListener('click', toggleMode);
 
-  modeToggleBtn.addEventListener('click', toggleMode);
-
-  setInitialMode();
-  toggleColorControls();
-  generateImage();
+  // initialize UI
+  setInitialMode();
+  toggleColorControls();
+  generateImage();
 </script>
 
 </body>
