@@ -199,6 +199,13 @@
       <input type="color" id="gradientEnd" value="#0000ff" />
     </div>
 
+    <!-- New Border Controls -->
+    <label for="borderWidth">Border Width (px):</label>
+    <input type="number" id="borderWidth" min="0" max="20" value="0" />
+
+    <label for="borderColor">Border Color:</label>
+    <input type="color" id="borderColor" value="#000000" />
+
     <button id="downloadBtn" disabled>Download Image</button>
     <button id="copyBtn" disabled>Copy Image</button>
   </div>
@@ -222,6 +229,9 @@
   const modeToggleBtn = document.querySelector('.mode-toggle');
   const body = document.body;
 
+  const borderWidthInput = document.getElementById('borderWidth');
+  const borderColorInput = document.getElementById('borderColor');
+
   function toggleColorControls() {
     if (colorTypeSelect.value === 'solid') {
       solidColorControls.style.display = 'block';
@@ -236,6 +246,8 @@
     const lines = textInput.value.split('\n');
     const fontSize = parseInt(fontSizeInput.value, 10) || 48;
     const colorType = colorTypeSelect.value;
+    const borderWidth = parseInt(borderWidthInput.value, 10) || 0;
+    const borderColor = borderColorInput.value;
 
     try {
       await document.fonts.load(`${fontSize}px "Compass"`);
@@ -269,8 +281,16 @@
 
     const x = canvas.width / 2;
     const startY = padding + fontSize / 2;
+
     lines.forEach((line, i) => {
       const y = startY + i * fontSize * 1.2;
+
+      if (borderWidth > 0) {
+        ctx.lineWidth = borderWidth;
+        ctx.strokeStyle = borderColor;
+        ctx.strokeText(line, x, y);
+      }
+
       ctx.fillText(line, x, y);
     });
 
@@ -327,14 +347,14 @@
     }
   }
 
-  [textInput, fontSizeInput, colorTypeSelect, colorPicker, gradientStart, gradientEnd].forEach(el => {
+  [textInput, fontSizeInput, colorTypeSelect, colorPicker, gradientStart, gradientEnd, borderWidthInput, borderColorInput].forEach(el => {
     el.addEventListener('input', () => {
       toggleColorControls();
       generateImage();
     });
   });
 
-  downloadBtn.addEventListener('click', () => {
+  document.getElementById('downloadBtn').addEventListener('click', () => {
     const dataURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = dataURL;
@@ -342,7 +362,7 @@
     link.click();
   });
 
-  copyBtn.addEventListener('click', copyImageToClipboard);
+  document.getElementById('copyBtn').addEventListener('click', copyImageToClipboard);
   modeToggleBtn.addEventListener('click', toggleMode);
 
   setInitialMode();
