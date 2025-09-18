@@ -390,16 +390,18 @@
   });
 
   document.getElementById('copyBtn').addEventListener('click', copyImageToClipboard);
+
   document.querySelector('.mode-toggle').addEventListener('click', toggleMode);
+
   document.getElementById('enableBorder').addEventListener('change', () => {
-    document.getElementById('borderControls').style.display = this.checked ? 'block' : 'none';
+    borderControlsDiv.style.display = enableBorderCheckbox.checked ? 'block' : 'none';
     generateImage();
   });
+
   document.getElementById('borderWidth').addEventListener('input', generateImage);
   document.getElementById('borderColor').addEventListener('input', generateImage);
 
   toggleColorControls();
-
   setInitialMode();
   generateImage();
 
