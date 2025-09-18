@@ -184,7 +184,8 @@
     <label for="colorType">Color Type:</label>
     <select id="colorType">
       <option value="solid">Solid Color</option>
-      <option value="gradient">Gradient</option>
+      <option value="gradient_horizontal">Gradient Horizontal</option>
+      <option value="gradient_vertical">Gradient Vertical</option>
     </select>
 
     <div id="solidColorControls">
@@ -198,12 +199,6 @@
       <label for="gradientEnd">Gradient End Color:</label>
       <input type="color" id="gradientEnd" value="#0000ff" />
     </div>
-
-    <label for="gradientOrientation">Gradient Direction:</label>
-    <select id="gradientOrientation">
-      <option value="horizontal">Horizontal</option>
-      <option value="vertical">Vertical</option>
-    </select>
 
     <label>
       <input type="checkbox" id="enableBorder" />
@@ -243,35 +238,36 @@
   const modeToggleBtn = document.querySelector('.mode-toggle');
   const body = document.body;
 
-  const gradientOrientationSelect = document.getElementById('gradientOrientation');
+  const gradientSelect = document.getElementById('colorType');
 
   const enableBorderCheckbox = document.getElementById('enableBorder');
   const borderControlsDiv = document.getElementById('borderControls');
-
   const borderWidthInput = document.getElementById('borderWidth');
   const borderColorInput = document.getElementById('borderColor');
 
   enableBorderCheckbox.addEventListener('change', () => {
     borderControlsDiv.style.display = enableBorderCheckbox.checked ? 'block' : 'none';
+    generateImage();
   });
 
   function toggleColorControls() {
-    if (colorTypeSelect.value === 'solid') {
-      solidColorControls.style.display = 'block';
-      gradientColorControls.style.display = 'none';
+    const val = colorTypeSelect.value;
+    if (val === 'solid') {
+      document.getElementById('solidColorControls').style.display = 'block';
+      document.getElementById('gradientColorControls').style.display = 'none';
     } else {
-      solidColorControls.style.display = 'none';
-      gradientColorControls.style.display = 'block';
+      document.getElementById('solidColorControls').style.display = 'none';
+      document.getElementById('gradientColorControls').style.display = 'block';
     }
   }
 
   async function generateImage() {
     const lines = textInput.value.split('\n');
     const fontSize = parseInt(fontSizeInput.value, 10) || 48;
-    const colorType = colorTypeSelect.value;
+    const colorTypeVal = colorTypeSelect.value;
     const borderWidth = parseInt(borderWidthInput.value, 10) || 0;
     const borderColor = borderColorInput.value;
-    const gradientOrientation = gradientOrientationSelect.value;
+    const gradientDirection = colorTypeVal;
 
     try {
       await document.fonts.load(`${fontSize}px "Compass"`);
@@ -294,14 +290,16 @@
     ctx.textBaseline = 'middle';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (colorType === 'solid') {
+    if (colorTypeVal === 'solid') {
       ctx.fillStyle = colorPicker.value;
     } else {
       let gradient;
-      if (gradientOrientation === 'horizontal') {
+      if (gradientDirection === 'gradient_horizontal') {
         gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-      } else {
+      } else if (gradientDirection === 'gradient_vertical') {
         gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      } else {
+        gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
       }
       gradient.addColorStop(0, gradientStart.value);
       gradient.addColorStop(1, gradientEnd.value);
@@ -309,12 +307,12 @@
     }
 
     const x = canvas.width / 2;
-    const startY = padding + fontSize / 2;
+    const startY = 20 + fontSize / 2;
 
     lines.forEach((line, i) => {
       const y = startY + i * fontSize * 1.2;
 
-      if (enableBorderCheckbox.checked && parseInt(borderWidthInput.value, 10) > 0) {
+      if (enableBorderCheckbox.checked && borderWidth > 0) {
         ctx.lineWidth = borderWidth;
         ctx.strokeStyle = borderColor;
         ctx.strokeText(line, x, y);
@@ -323,8 +321,8 @@
       ctx.fillText(line, x, y);
     });
 
-    downloadBtn.disabled = false;
-    copyBtn.disabled = false;
+    document.getElementById('downloadBtn').disabled = false;
+    document.getElementById('copyBtn').disabled = false;
   }
 
   async function copyImageToClipboard() {
@@ -334,7 +332,7 @@
           try {
             await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           } catch (err) {
-            console.error('Clipboard write error:', err);
+            console.error('Clipboard error:', err);
           }
         }
       }, 'image/png');
@@ -392,17 +390,23 @@
   });
 
   document.getElementById('copyBtn').addEventListener('click', copyImageToClipboard);
-  modeToggleBtn.addEventListener('click', toggleMode);
-  enableBorderCheckbox.addEventListener('change', () => {
-    borderControlsDiv.style.display = enableBorderCheckbox.checked ? 'block' : 'none';
+  document.querySelector('.mode-toggle').addEventListener('click', toggleMode);
+  document.getElementById('enableBorder').addEventListener('change', () => {
+    document.getElementById('borderControls').style.display = this.checked ? 'block' : 'none';
     generateImage();
   });
-  borderWidthInput.addEventListener('input', generateImage);
-  borderColorInput.addEventListener('input', generateImage);
+  document.getElementById('borderWidth').addEventListener('input', generateImage);
+  document.getElementById('borderColor').addEventListener('input', generateImage);
+
+  toggleColorControls();
 
   setInitialMode();
-  toggleColorControls();
   generateImage();
+
+  document.getElementById('colorType').addEventListener('change', () => {
+    toggleColorControls();
+    generateImage();
+  });
 </script>
 </body>
 </html>
